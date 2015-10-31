@@ -19,6 +19,8 @@ import uta.mav.appoint.db.command.*;
 import uta.mav.appoint.flyweight.TimeSlotFlyweightFactory;
 import uta.mav.appoint.helpers.TimeSlotHelpers;
 import uta.mav.appoint.login.*;
+import uta.mav.appoint.security.EncryptUtils;
+import uta.mav.appoint.security.HashingUtility;
 
 public class RDBImpl implements DBImplInterface{
 
@@ -220,7 +222,7 @@ public class RDBImpl implements DBImplInterface{
 					statement.setString(5,appointment.getAdvisingStartTime());
 					statement.setString(6,appointment.getAdvisingEndTime());
 					statement.setString(7,appointment.getAppointmentType());
-					statement.setInt(8,Integer.parseInt(appointment.getStudentId()));
+					statement.setString(8,appointment.getStudentId());
 					statement.setString(9,appointment.getDescription());
 					statement.setString(10,email);
 					statement.setString(11,appointment.getStudentPhoneNumber());
@@ -270,7 +272,10 @@ public class RDBImpl implements DBImplInterface{
 				set.setAppointmentType(rs.getString(6));
 				set.setAppointmentId(rs.getInt(7));
 				set.setDescription(rs.getString(8));
-				set.setStudentId(rs.getString(9));
+			
+				System.out.println("database value : " + rs.getString(9));
+				System.out.println("Student id : " + EncryptUtils.decode(rs.getString(9)));
+				set.setStudentId(EncryptUtils.decode(rs.getString(9)));
 				set.setStudentEmail(rs.getString(10));
 				set.setStudentPhoneNumber(rs.getString(11));
 				Appointments.add(set);
@@ -290,8 +295,8 @@ public class RDBImpl implements DBImplInterface{
 			Connection conn = this.connectDB();
 			PreparedStatement statement;
 //			String command = "SELECT User_Advisor.pname,User_Advisor.email,date,start,end,type,id,description,student_email FROM USER,Appointments,User_Advisor "
-					String command = "SELECT User_Advisor.pname,User.email,date,start,end,type,id,description,student_email FROM USER,Appointments,User_Advisor "
-						+ "WHERE USER.email=? AND user.userid=Appointments.student_userid AND User_Advisor.userid=Appointments.advisor_userid";
+					String command = "SELECT User_Advisor.pname,User.email,date,start,end,type,id,description,student_email,student_Id,phone_num FROM USER,Appointments,User_Advisor,user_student "
+						+ "WHERE USER.email=? AND user.userid=Appointments.student_userid AND User_Advisor.userid=Appointments.advisor_userid AND user.userid = user_student.userid";
 			statement = conn.prepareStatement(command);
 			statement.setString(1, user.getEmail());
 			ResultSet rs = statement.executeQuery();
@@ -305,8 +310,9 @@ public class RDBImpl implements DBImplInterface{
 				set.setAppointmentType(rs.getString(6));
 				set.setAppointmentId(rs.getInt(7));
 				set.setDescription(rs.getString(8));
-				set.setStudentId("Advisor only");
+				set.setStudentId(EncryptUtils.decode(rs.getString(10)));
 				set.setStudentEmail(rs.getString(9));
+				set.setStudentPhoneNumber(rs.getString(11));
 				Appointments.add(set);
 			}
 			conn.close();

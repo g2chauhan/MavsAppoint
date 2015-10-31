@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import uta.mav.appoint.visitor.Visitor;
 
 public class StudentUser extends LoginUser{
-	private Integer studentId;
+	private String studentId;
 	private String 	phoneNumber;
 	private String	lastNameInitial;
 
@@ -32,11 +32,11 @@ public class StudentUser extends LoginUser{
 		return v.check(this,o);
 	}
 
-	public Integer getStudentId() {
+	public String getStudentId() {
 		return studentId;
 	}
 
-	public void setStudentId(Integer studentId) {
+	public void setStudentId(String studentId) {
 		this.studentId = studentId;
 	}
 

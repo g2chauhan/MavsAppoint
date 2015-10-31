@@ -4,11 +4,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import uta.mav.appoint.login.*;
+import uta.mav.appoint.security.EncryptUtils;
 
 public class CreateStudent  extends SQLCmd{
 
 	private Integer userid;
-	private Integer student_Id;
+	private String student_Id;
 	private Integer degree_type;
 	private String phone_num;
 	private String last_name_initial;
@@ -32,7 +33,7 @@ public class CreateStudent  extends SQLCmd{
 			int i=1;
 			statement.setInt(i,userid);
 			i++;
-			statement.setInt(i,student_Id);
+			statement.setString(i,EncryptUtils.encode(student_Id.toString()));
 			i++;
 			statement.setInt(i,degree_type);
 			i++;

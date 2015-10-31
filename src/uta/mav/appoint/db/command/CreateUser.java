@@ -1,9 +1,10 @@
 package uta.mav.appoint.db.command;
 
 import java.sql.PreparedStatement;
-import uta.mav.appoint.email.*;
 
+import uta.mav.appoint.email.*;
 import uta.mav.appoint.login.*;
+import uta.mav.appoint.security.HashingUtility;
 
 public class CreateUser  extends SQLCmd{
 	
@@ -29,9 +30,8 @@ public class CreateUser  extends SQLCmd{
 			PreparedStatement statement = conn.prepareStatement(command);
 			
 			statement.setString(1,email);
-			statement.setString(2,password);
-			statement.setString(3,role);
-			
+			statement.setString(2,HashingUtility.hashString(password));
+			statement.setString(3,role);			
 			statement.executeUpdate();
 			
 			b = true;

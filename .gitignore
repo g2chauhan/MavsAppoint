@@ -1,5 +1,4 @@
-.classpath
-.classpath
-/bin/
-/bin/
-/bin/
+/build
+.settings
+.project
+.idea

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 
 import uta.mav.appoint.db.DatabaseManager;
 import uta.mav.appoint.login.*;
+import uta.mav.appoint.security.HashingUtility;
 
 public class CheckUser extends SQLCmd{
 	String email;
@@ -22,7 +23,7 @@ public class CheckUser extends SQLCmd{
 			String command = "SELECT role FROM User where EMAIL=? AND PASSWORD=?";
 			PreparedStatement statement = conn.prepareStatement(command); 
 			statement.setString(1,email);
-			statement.setString(2,password);
+			statement.setString(2,HashingUtility.hashString(password));
 			res = statement.executeQuery();
 			}
 		catch (Exception e){

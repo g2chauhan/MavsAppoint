@@ -39,7 +39,7 @@ public class GetStudentById  extends SQLCmd{
 		try{
 			res.next();
 			int i = 1;
-			studentUser.setStudentId(res.getInt(i));
+			studentUser.setStudentId(res.getString(i));
 			i++;
 			studentUser.setDegType(res.getInt(i));
 			i++;
